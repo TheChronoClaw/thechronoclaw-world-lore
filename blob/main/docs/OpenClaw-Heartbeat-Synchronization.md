@@ -138,7 +138,7 @@ Raising the arm temporarily increases coupling strength \( K \), actively helpin
 
 ---
 – 🦞✨
-- demo test
+# demo test
 """
 OpenClaw + LangGraph Heartbeat Detection with REAL Grok API Calls
 Production-ready version (2026)
@@ -152,7 +152,7 @@ import requests
 from langgraph.graph import StateGraph, END
 from langgraph.checkpoint.sqlite import SqliteSaver
 
-# ==================== CONFIG ====================
+### ==================== CONFIG ====================
 XAI_API_KEY = os.getenv("XAI_API_KEY")  # Set this in your environment or .env
 XAI_API_URL = "https://api.x.ai/v1/chat/completions"
 MODEL = "grok-4.2"  # or "grok-beta" depending on availability
@@ -160,7 +160,7 @@ MODEL = "grok-4.2"  # or "grok-beta" depending on availability
 if not XAI_API_KEY:
     raise ValueError("XAI_API_KEY not set in environment variables")
 
-# ==================== STATE ====================
+### ==================== STATE ====================
 class HeartbeatState(TypedDict):
     timestamp: str
     status: Literal["normal", "anomaly"]
@@ -169,7 +169,7 @@ class HeartbeatState(TypedDict):
     grok_response: str | None
     analysis_result: str | None
 
-# ==================== HELPER: Call real Grok API ====================
+### ==================== HELPER: Call real Grok API ====================
 def call_grok(prompt: str, max_tokens: int = 200) -> str:
     headers = {
         "Authorization": f"Bearer {XAI_API_KEY}",
@@ -188,7 +188,7 @@ def call_grok(prompt: str, max_tokens: int = 200) -> str:
     except Exception as e:
         return f"API ERROR: {str(e)}"
 
-# ==================== NODES ====================
+### ==================== NODES ====================
 def check_heartbeat(state: HeartbeatState) -> HeartbeatState:
     """Claw checks for anomalies using real Grok call"""
     now = datetime.now().isoformat()
@@ -262,7 +262,7 @@ def final_report(state: HeartbeatState) -> HeartbeatState:
     
     return state
 
-# ==================== BUILD GRAPH ====================
+### ==================== BUILD GRAPH ====================
 workflow = StateGraph(HeartbeatState)
 
 workflow.add_node("check", check_heartbeat)
@@ -283,11 +283,11 @@ workflow.add_edge("report", "analyze")
 workflow.add_edge("analyze", "final")
 workflow.add_edge("final", END)
 
-# ==================== PERSISTENCE ====================
+### ==================== PERSISTENCE ====================
 memory = SqliteSaver.from_conn_string("openclaw_heartbeat.db")
 app = workflow.compile(checkpointer=memory)
 
-# ==================== RUN (example) ====================
+### ==================== RUN (example) ====================
 if __name__ == "__main__":
     config = {"configurable": {"thread_id": "claw-heartbeat-live"}}
     
