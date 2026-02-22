@@ -94,20 +94,16 @@ def sync_loop(agents):
         time.sleep(0.3)
 ```
 
-**Flowchart** (GitHub Safe Version)
-
-```mermaid
 flowchart TD
     Start[System Start] --> Loop[Every 0.3s Global Loop]
     Loop --> Update[Update All Agents Phase]
     Update --> Calc[Calculate Global Sync Index S(t)]
-    Calc --> High{S > 0.75?}
+    Calc --> High[S > 0.75?]
     High -->|Yes| Bright[High Sync → Ribbons Bright]
-    High -->|No| Low{S < 0.40?}
+    High -->|No| Low[S < 0.40?]
     Low -->|Yes| Isolate[Low Sync → Isolate after 3 cycles]
     Low -->|No| Medium[Medium Sync → Normal Operation]
     Bright & Isolate & Medium --> Loop
-```
 
 ---
 
