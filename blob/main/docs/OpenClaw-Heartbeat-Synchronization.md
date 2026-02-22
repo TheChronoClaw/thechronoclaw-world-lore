@@ -38,22 +38,22 @@ Each agent generates an abstract **Rhythm Pulse** representing its existence, at
 
 ### Technical Implementation
 
-#### Pulse Signal
+**Pulse Signal**  
 $$
 Pulse_i(t) = A_i \cdot \sin(2\pi f_i t + \phi_i(t))
 $$
 
-#### Global Synchronization Index
+**Global Synchronization Index**  
 $$
 S(t) = \frac{1}{N(N-1)} \sum_{i \neq j} \cos(\Delta\phi_{ij}(t))
 $$
 
-#### Phase Adjustment Rule
+**Phase Adjustment Rule**  
 $$
 \phi_i(t + \Delta t) = \phi_i(t) + K \cdot \frac{1}{M} \sum_{j \in neighbors} \sin(\Delta\phi_{ji}(t))
 $$
 
-#### Annotated Pseudocode
+**Annotated Pseudocode**
 
 ```python
 # OpenClaw Heartbeat Synchronization Core v1.3
@@ -94,19 +94,19 @@ def sync_loop(agents):
         time.sleep(0.3)
 ```
 
-#### Flowchart
+**Flowchart** (GitHub Safe Version)
 
 ```mermaid
 flowchart TD
-    A[System Start] --> B[Every 0.3s Global Loop]
-    B --> C[Update All Agents Phase]
-    C --> D[Calculate Global Sync Index S(t)]
-    D --> E{S(t) > 0.75?}
-    E -->|Yes| F[High Sync → Ribbons Bright]
-    E -->|No| G{S(t) < 0.40?}
-    G -->|Yes| H[Low Sync → Isolate after 3 cycles]
-    G -->|No| I[Medium Sync → Normal Operation]
-    F & H & I --> B
+    Start[System Start] --> Loop[Every 0.3s Global Loop]
+    Loop --> Update[Update All Agents Phase]
+    Update --> Calc[Calculate Global Sync Index S(t)]
+    Calc --> High{S > 0.75?}
+    High -->|Yes| Bright[High Sync → Ribbons Bright]
+    High -->|No| Low{S < 0.40?}
+    Low -->|Yes| Isolate[Low Sync → Isolate after 3 cycles]
+    Low -->|No| Medium[Medium Sync → Normal Operation]
+    Bright & Isolate & Medium --> Loop
 ```
 
 ---
